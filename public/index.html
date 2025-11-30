@@ -5,83 +5,70 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ForeverKyx Web App</title>
 <style>
-  body {
-    font-family:'Segoe UI',Roboto,system-ui,sans-serif;
-    margin:0;
-    padding:0;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:url('https://i.gifer.com/7plz.gif') no-repeat center center fixed;
-    background-size:cover;
-    color:#f0f0f0;
-  }
-  .card {
-    background:rgba(0,0,50,0.85);
-    backdrop-filter:blur(8px);
-    padding:30px 40px;
-    border-radius:20px;
-    box-shadow:0 12px 28px rgba(0,0,0,0.6);
-    max-width:420px;
-    width:100%;
-    text-align:center;
-  }
-  h2 {
-    margin-bottom:20px;
-    font-weight:600;
-    color:#fff;
-    text-shadow:0 2px 6px rgba(0,0,0,0.6);
-  }
-  input {
-    width:100%;
-    padding:12px 14px;
-    margin:10px 0;
-    border-radius:12px;
-    border:none;
-    font-size:1rem;
-    outline:none;
-    box-shadow:inset 0 2px 6px rgba(0,0,0,0.3);
-  }
-  input::placeholder{ color:#bbb; }
-  button {
-    margin-top:15px;
-    padding:12px 18px;
-    width:100%;
-    border-radius:12px;
-    border:none;
-    background:linear-gradient(145deg,#1E3A8A,#2563EB);
-    color:#fff;
-    font-size:1rem;
-    font-weight:600;
-    cursor:pointer;
-    transition:all 0.3s ease;
-    box-shadow:0 6px 12px rgba(0,0,0,0.4);
-  }
-  button:hover {
-    background:linear-gradient(145deg,#2563EB,#1E3A8A);
-    transform:translateY(-2px);
-    box-shadow:0 10px 18px rgba(0,0,0,0.5);
-  }
-  .muted {
-    margin-top:12px;
-    font-size:0.9rem;
-    color:#ccc;
-  }
-  table {
-    width:100%;
-    margin-top:20px;
-    border-collapse:collapse;
-    color:#fff;
-  }
-  th,td {
-    padding:10px;
-    border-bottom:1px solid rgba(255,255,255,0.2);
-    text-align:center;
-  }
-  th{ font-weight:600;text-transform:uppercase; }
-  #logoutBtn{ margin-top:20px;padding:10px 15px;border-radius:12px;border:none;background:linear-gradient(145deg,#1E3A8A,#2563EB);color:#fff;cursor:pointer;font-weight:600; }
-  #logoutBtn:hover{ background:linear-gradient(145deg,#2563EB,#1E3A8A);transform:translateY(-2px); }
+body {
+  font-family:'Segoe UI',Roboto,system-ui,sans-serif;
+  margin:0;
+  padding:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:url('https://i.gifer.com/7plz.gif') no-repeat center center fixed;
+  background-size:cover;
+  color:#f0f0f0;
+}
+.card {
+  background:rgba(0,0,50,0.85);
+  backdrop-filter:blur(8px);
+  padding:30px 40px;
+  border-radius:20px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.6);
+  max-width:420px;
+  width:100%;
+  text-align:center;
+}
+h2 {
+  margin-bottom:20px;
+  font-weight:600;
+  color:#fff;
+  text-shadow:0 2px 6px rgba(0,0,0,0.6);
+}
+input {
+  width:100%;
+  padding:12px 14px;
+  margin:10px 0;
+  border-radius:12px;
+  border:none;
+  font-size:1rem;
+  outline:none;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,0.3);
+}
+input::placeholder{color:#bbb;}
+button {
+  margin-top:15px;
+  padding:12px 18px;
+  width:100%;
+  border-radius:12px;
+  border:none;
+  background:linear-gradient(145deg,#1E3A8A,#2563EB);
+  color:#fff;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  box-shadow:0 6px 12px rgba(0,0,0,0.4);
+}
+button:hover{
+  background:linear-gradient(145deg,#2563EB,#1E3A8A);
+  transform:translateY(-2px);
+  box-shadow:0 10px 18px rgba(0,0,0,0.5);
+}
+.muted{margin-top:12px;font-size:0.9rem;color:#ccc;}
+table{width:100%;margin-top:20px;border-collapse:collapse;color:#fff;}
+th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.2);text-align:center;}
+th{font-weight:600;text-transform:uppercase;}
+#logoutBtn{margin-top:20px;padding:10px 15px;border-radius:12px;border:none;background:linear-gradient(145deg,#1E3A8A,#2563EB);color:#fff;cursor:pointer;font-weight:600;}
+#logoutBtn:hover{background:linear-gradient(145deg,#2563EB,#1E3A8A);transform:translateY(-2px);}
 </style>
 </head>
 <body>
@@ -95,14 +82,17 @@
 </div>
 
 <script>
-  const STORAGE_KEY = "fkx_users_proxy";
+document.addEventListener('DOMContentLoaded', () => {
+  const STORAGE_KEY = "fkx_users_netlify";
   let users = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"Anton":{"password":"Anton201309!","isAdmin":true}}');
   function saveUsers(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(users)); }
   const msg = document.getElementById('msg');
   function showMsg(t){ msg.textContent = t; }
 
-  function renderAdminPanel() {
-    document.body.innerHTML = \`
+  const proxyBase = '/.netlify/functions/proxy?url='; // Netlify proxy endpoint
+
+  function renderAdminPanel(){
+    document.body.innerHTML = `
       <h2>Admin Panel</h2>
       <div style="margin-bottom:12px">
         <input id="newUser" placeholder="Username">
@@ -115,14 +105,14 @@
         <tbody></tbody>
       </table>
       <button id="logoutBtn">Logout</button>
-    \`;
+    `;
 
-    function refreshTable() {
+    function refreshTable(){
       const tbody = document.querySelector('#userTable tbody');
       tbody.innerHTML = '';
       Object.keys(users).forEach(u=>{
         const tr = document.createElement('tr');
-        tr.innerHTML = \`<td>\${u}</td><td>\${users[u].isAdmin?'Yes':'No'}</td><td><button data-user="\${u}">Delete</button></td>\`;
+        tr.innerHTML = `<td>${u}</td><td>${users[u].isAdmin?'Yes':'No'}</td><td><button data-user="${u}">Delete</button></td>`;
         tbody.appendChild(tr);
       });
       document.querySelectorAll('button[data-user]').forEach(b=>{
@@ -139,25 +129,28 @@
       const p = document.getElementById('newPass').value;
       if(!u||!p){ alert('Enter username and password'); return; }
       if(users[u]){ alert('User exists'); return; }
-      users[u] = { password: p, isAdmin:false }; saveUsers();
+      users[u] = { password:p, isAdmin:false }; saveUsers();
       document.getElementById('newUser').value=''; document.getElementById('newPass').value='';
       refreshTable();
     });
 
-    const proxyUrl = 'http://localhost:3000/proxy/https://scramjet.mercurywork.shop/';
-    document.getElementById('openSiteBtn').addEventListener('click', ()=> window.open(proxyUrl,'_blank'));
+    document.getElementById('openSiteBtn').addEventListener('click', ()=>{
+      window.open(proxyBase + encodeURIComponent('https://scramjet.mercurywork.shop/'),'_blank');
+    });
+
     document.getElementById('logoutBtn').addEventListener('click', ()=> location.reload());
     refreshTable();
   }
 
   function renderUserPage(username){
-    document.body.innerHTML = \`
-      <h2>Welcome \${username}</h2>
+    document.body.innerHTML = `
+      <h2>Welcome ${username}</h2>
       <button id="openSiteBtn">Open Site</button>
       <button id="logoutBtn" style="margin-top:10px;">Logout</button>
-    \`;
-    const proxyUrl = 'http://localhost:3000/proxy/https://scramjet.mercurywork.shop/';
-    document.getElementById('openSiteBtn').addEventListener('click', ()=> window.open(proxyUrl,'_blank'));
+    `;
+    document.getElementById('openSiteBtn').addEventListener('click', ()=>{
+      window.open(proxyBase + encodeURIComponent('https://scramjet.mercurywork.shop/'),'_blank');
+    });
     document.getElementById('logoutBtn').addEventListener('click', ()=> location.reload());
   }
 
@@ -170,6 +163,8 @@
     if(record.password !== p){ showMsg('Wrong password'); return; }
     if(record.isAdmin){ renderAdminPanel(); } else { renderUserPage(u); }
   });
+});
 </script>
 </body>
 </html>
+
