@@ -9,7 +9,7 @@ body {
   font-family:'Segoe UI',Roboto,system-ui,sans-serif;
   margin:0;
   padding:0;
-  height:100vh;
+  min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -72,7 +72,8 @@ th{font-weight:600;text-transform:uppercase;}
 </style>
 </head>
 <body>
-<div class="card" id="loginCard">
+
+<div class="card" id="mainCard">
   <h2>ForeverKyx Login</h2>
   <input id="username" placeholder="Username">
   <input id="password" placeholder="Password" type="password">
@@ -89,16 +90,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const msg = document.getElementById('msg');
   function showMsg(t){ msg.textContent = t; }
 
-  const proxyBase = '/.netlify/functions/proxy?url='; // Netlify proxy endpoint
+  const proxyBase = '/.netlify/functions/proxy?url='; // Netlify proxy
 
   function renderAdminPanel(){
-    document.body.innerHTML = `
+    const card = document.getElementById('mainCard');
+    card.innerHTML = `
       <h2>Admin Panel</h2>
       <div style="margin-bottom:12px">
         <input id="newUser" placeholder="Username">
         <input id="newPass" placeholder="Password" type="password">
         <button id="createBtn">Create User</button>
-        <button id="openSiteBtn" style="margin-top:10px;">Open Site</button>
+        <button id="openSiteBtn" style="margin-top:10px;">Open Scramjet Site</button>
       </div>
       <table border="1" cellpadding="8" cellspacing="0" width="100%" id="userTable">
         <thead><tr><th>Username</th><th>Admin</th><th>Action</th></tr></thead>
@@ -135,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('openSiteBtn').addEventListener('click', ()=>{
-      window.open(proxyBase + encodeURIComponent('https://scramjet.mercurywork.shop/'),'_blank');
+      window.open(proxyBase + encodeURIComponent('https://scramjet.mercurywork.shop/'), '_blank');
     });
 
     document.getElementById('logoutBtn').addEventListener('click', ()=> location.reload());
@@ -143,13 +145,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderUserPage(username){
-    document.body.innerHTML = `
+    const card = document.getElementById('mainCard');
+    card.innerHTML = `
       <h2>Welcome ${username}</h2>
-      <button id="openSiteBtn">Open Site</button>
+      <button id="openSiteBtn">Open Scramjet Site</button>
       <button id="logoutBtn" style="margin-top:10px;">Logout</button>
     `;
     document.getElementById('openSiteBtn').addEventListener('click', ()=>{
-      window.open(proxyBase + encodeURIComponent('https://scramjet.mercurywork.shop/'),'_blank');
+      window.open(proxyBase + encodeURIComponent('https://scramjet.mercurywork.shop/'), '_blank');
     });
     document.getElementById('logoutBtn').addEventListener('click', ()=> location.reload());
   }
@@ -165,6 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+
 </body>
 </html>
-
